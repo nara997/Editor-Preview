@@ -2,7 +2,7 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import 'quill/dist/quill.snow.css';
-import { useEffect, useRef, useState, } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 
 export type IfilterData = {
@@ -59,7 +59,6 @@ export const Editor = ({ filterData, setOpen }: IData) => {
           }
     }
 
-    console.log("filterData",filterData)
 
     return (
         <div className='p-9' >
