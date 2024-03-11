@@ -9,11 +9,8 @@ interface IData {
   setOpen: (open: boolean) => any;
 }
 
-// const data: IData = {
-//     ID: "24567",
-//     Subject: "Quantum Mechanics Exploration",
-//     Body: "Greetings explorers! In our quest to unravel the mysteries of the quantum realm, let's delve into the mind-bending world of superposition and entanglement. Buckle up for a journey where particles can exist in multiple states simultaneously, and actions on one can instantaneously affect another, regardless of distance. Share your thoughts and theories as we navigate this perplexing yet fascinating domain",
-// };
+
+
 
 export const Editor = ({ filterData, setOpen }: IData) => {
   const { handleSubmit, control } = useForm<IMessage>();
