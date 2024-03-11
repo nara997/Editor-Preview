@@ -21,7 +21,7 @@ export const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("https://italent2.demo.lithium.com/api/2.0/search?q=SELECT id, subject, author,conversation FROM messages where depth=0");
+                const response = await fetch("https://italent2.demo.lithium.com/api/2.0/search?q=SELECT id,body, subject, author,conversation FROM messages where depth=0");
                 const jsonData = await response.json();
                 setData(jsonData.data.items);
             } catch (error) {

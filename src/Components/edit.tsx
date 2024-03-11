@@ -59,7 +59,7 @@ export const Editor = ({ filterData, setOpen }: IData) => {
           }
     }
 
-    
+    console.log("filterData",filterData)
 
     return (
         <div className='p-9' >
