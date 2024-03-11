@@ -1,137 +1,149 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-export type     IMessage = {
-  id: string;
-  subject: string;
-  body: string;
-};
-interface IData {
-  filterData: IMessage[];
-  setOpen: (open: boolean) => any;
+
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+
+import 'quill/dist/quill.snow.css';
+import { useEffect, useRef, useState, } from 'react';
+import ReactQuill from 'react-quill';
+
+export type IfilterData = {
+    id: string,
+    subject: string,
+    body: string
+    view_href: string,
+    conversation: {
+        last_post_time: string
+    }
+    author: {
+        login: string
+        id:string
+    }
 }
 
-
-
+interface IData {
+    filterData: IfilterData[],
+    setOpen: (open: boolean) => any;
+}
 
 export const Editor = ({ filterData, setOpen }: IData) => {
-  const { handleSubmit, control } = useForm<IMessage>();
+    const quillRef = useRef(null);
+    useEffect(() => {
+        if (quillRef.current) {
+            const quill = quillRef.current.getEditor();
+            const htmlContent = filterData[0].body;
+            quill.format('size', 'normal')
+            const delta = quill.clipboard.convert(htmlContent); // Convert HTML to Delta
+            quill.setContents(delta); // Set Delta as editor content
+        }
+    }, [quillRef]);
 
-  const onSubmit: SubmitHandler<IMessage> = (formData) => {
-    console.log("Form data:", formData);
-  };
+    const { handleSubmit, control } = useForm();
+    // console.log("filterData",filterData[0].body)
 
-  const cancelButton = () => {
-    setOpen(false);
-  };
+    const onSubmit: SubmitHandler<IfilterData> = (formData) => {
 
-  return (
-    <div className="p-9">
-      <h1 className="text-center font-semibold text-2xl "></h1>
-      <div className="justify-start flex p-2 mb-2" onClick={cancelButton}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
-        </svg>
-        <p className="pl-2">Home</p>
-      </div>
-      <div className="container mx-auto max-w-7xl px-4 min-h-screen justify-around grid h-full gap-14 grid-flow-col grid-cols-2">
-        {filterData.map((items) => (
-          <>
-            <div
-              key={items.id}
-              className="border border-slate-300 p-6 rounded-md shadow-md min-h-96 overscroll-contain overflow-auto h-48"
-            >
-              <div className="mb-4">
-                <h1 className="text-md font-semibold">Subject:</h1>
-                <p className="text-gray-700 text-sm font-normal">
-                  {items.subject}
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-md font-semibold">Body:</h1>
-                <p className="text-gray-700 flex-grow break-all text-sm font-normal">
-                  {items.body}
-                </p>
-              </div>
+        console.log('Form data:', formData);
+    };
+
+    const cancelButton = () => {
+        setOpen(false)
+    }
+
+    const modules = {
+        toolbar: {
+            container: [
+              
+              ['bold', 'italic', 'underline', 'strike'],
+              ['link'],
+              ['clean']
+            ],
+          }
+    }
+
+    
+
+    return (
+        <div className='p-9' >
+            <div className='justify-start flex p-2' onClick={cancelButton}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <p className='pl-2'>Home</p>
             </div>
-            {/* Editable Preview */}
-            <div className="w-full  ">
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="bg-white p-4 rounded-md shadow-md"
-              >
-                <div className="mb-4">
-                  <label
-                    htmlFor="subject"
-                    className="block text-md font-semibold text-gray-600"
-                  >
-                    Subject:
-                  </label>
-                  <Controller
-                    name="subject"
-                    control={control}
-                    defaultValue={items.subject}
-                    render={({ field }) => (
-                      <input
-                        onChange={(e) => field.onChange(e.target.value)}
-                        value={field.value}
-                        type="text"
-                        className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:border-blue-500 font-normal"
-                        placeholder="Enter subject"
-                      />
-                    )}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="body"
-                    className="block text-md font-semibold text-gray-600"
-                  >
-                    Body:
-                  </label>
-                  <Controller
-                    name="body"
-                    control={control}
-                    defaultValue={items.body}
-                    render={({ field }) => (
-                      <textarea
-                        onChange={(e) => field.onChange(e.target.value)}
-                        value={field.value}
-                        className="w-full min-h-52 px-3 py-2 text-sm font-normal border border-slate-300 rounded-md focus:outline-none focus:border-blue-500"
-                        placeholder="Enter body"
-                      />
-                    )}
-                  />
-                </div>
-                <div className="space-x-4">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-                  >
-                    Publish
-                  </button>
-                  <button
-                    type="submit"
-                    onClick={cancelButton}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-                  >
-                    Back
-                  </button>
-                </div>
-              </form>
+            <div className="container mx-auto max-w-7xl px-4 min-h-screen justify-around grid h-full gap-14 grid-flow-col grid-cols-2">
+
+                {filterData.map((items) => (
+                    <>
+
+                        <div key={items.id} className='border border-slate-300 p-6 rounded-md shadow-md min-h-96 overscroll-contain overflow-auto h-48'>
+                            <div className='mb-4'>
+                                <h1 className='text-sm font-semibold'>Subject:</h1>
+                                <p className='text-gray-700 text-xs' >{items.subject}</p>
+                            </div>
+                            <div className='flex flex-col'>
+                                <h1 className='text-sm font-semibold'>Body:</h1>
+                                <p className='text-gray-700 flex-grow break-all text-xs'>{items.body}</p>
+                            </div>
+                        </div>
+                        {/* Editable Preview */}
+                        <div className='w-full'>
+                            <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-4 rounded-md shadow-md'>
+                                <div className='mb-4'>
+                                    <label htmlFor="subject" className='block text-sm font-semibold text-gray-600'>Subject:</label>
+                                    <Controller
+                                        name="subject"
+                                        control={control}
+                                        defaultValue={items.subject}
+                                        render={({ field }) => (
+                                            <input
+                                                onChange={(e) => field.onChange(e.target.value)}
+                                                value={field.value}
+                                                type="text"
+                                                className='w-full px-3 py-2 text-xs border rounded-md focus:outline-none focus:border-blue-500'
+                                                placeholder="Enter subject"
+                                            />
+                                        )}
+                                    />
+                                    {/* <div ref={quillRef} */}
+                                </div>
+                                <div className='mb-4'>
+                                    <label htmlFor="body" className='block text-sm font-semibold text-gray-600'>Body:</label>
+                                    <Controller
+                                        name="body"
+                                        control={control}
+                                        // defaultValue=""// Set default value to empty string
+                                        render={({ field }) => (
+                                            <ReactQuill
+                                                ref={quillRef}
+                                                modules={modules}
+                                                className='w-full h-full px-3 py-2 text-sm font-normal border border-slate-300 rounded-md focus:outline-none focus:border-blue-500'
+                                                onChange={(content, delta, source, editor) => {
+                                                    const textContent = editor.getText();
+                                                    field.onChange(textContent);
+                                                }} // Update form value with Quill data
+                                                theme="snow"
+                                                placeholder="Enter body"
+
+                                            />
+                                        )}
+                                    />
+
+                                </div>
+                                <div className='space-x-4'>
+
+                                    <button type="submit" className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300'>
+                                        Publish
+                                    </button>
+                                    <button type="submit" onClick={cancelButton} className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300'>
+                                        Back
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </>
+                ))}
             </div>
-          </>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
+
+// export default Editor;
