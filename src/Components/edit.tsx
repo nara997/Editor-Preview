@@ -20,7 +20,7 @@ export type IfilterData = {
 }
 
 
-interface ReactQuillRef extends Quill {
+interface ReactQuillRef extends ReactQuill {
     getEditor: () => any;
 }
 
