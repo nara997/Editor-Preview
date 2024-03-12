@@ -2,7 +2,7 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import 'quill/dist/quill.snow.css';
-import { useEffect, useRef, useState, } from 'react';
+import { useEffect, useRef} from 'react';
 import ReactQuill from 'react-quill';
 
 export type IfilterData = {
@@ -19,6 +19,11 @@ export type IfilterData = {
     }
 }
 
+
+interface ReactQuillRef extends Quill {
+    getEditor: () => any;
+}
+
 interface IData {
     filterData: IfilterData[],
     setOpen: (open: boolean) => any;
@@ -26,7 +31,8 @@ interface IData {
 }
 
 export const Editor = ({ filterData, setOpen, err }: IData) => {
-    const quillRef = useRef(null);
+    const quillRef = useRef<ReactQuillRef | null>(null);
+
     useEffect(() => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
@@ -44,7 +50,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
     const modules = {
         toolbar: {
             container: [
-
                 ['bold', 'italic', 'underline', 'strike'],
                 ['link'],
                 ['clean']
@@ -63,7 +68,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
         console.log('Form data:', formData);
     };
 
-    console.log("errr>>>>>", err)
 
     return (
         <div>
@@ -161,4 +165,3 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
     );
 };
 
-// export default Editor;

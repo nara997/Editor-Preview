@@ -1,10 +1,7 @@
-// import React from 'react'
 
 import { useEffect, useState } from "react"
 import { Editor, IfilterData } from "./edit"
-import { stringify } from "querystring"
-// import { useHistory } from 'react-router-dom';
-// import { Link } from "react-router-dom";
+
 
 
 
