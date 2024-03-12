@@ -44,7 +44,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
     }, [quillRef]);
 
     const { handleSubmit, control } = useForm();
-    // console.log("filterData",filterData[0].body)
 
 
     const modules = {
