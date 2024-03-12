@@ -13,6 +13,7 @@ export const Home = () => {
     const [filterData, setFilterData] = useState<IfilterData[]>([])
     const [open, setOpen] = useState<boolean>(false)
     const [avatar,setAvatar] =useState<IfilterData[]>([])
+    const [err,setErr]= useState<boolean>(false)
 
     // const history = useHistory();
 
@@ -60,6 +61,13 @@ export const Home = () => {
 
     const buttonhandle = (id: string) => {
         const filtered = data.filter(item => item.id === id);
+        const subfilter = data.filter(item => item.subject.startsWith("Re:"));
+        console.log("subfilte>>>>r",subfilter)
+        if(subfilter.length!==0){
+            setErr(true)
+        }else{
+            setErr(false)
+        }
         setFilterData(filtered)
         setOpen(true)
     }
@@ -109,7 +117,7 @@ export const Home = () => {
                 </div>
             )}
             {open === true && <div>
-                <Editor filterData={filterData} setOpen={setOpen} />
+                <Editor filterData={filterData} setOpen={setOpen} err= {err} />
             </div>
 
             }

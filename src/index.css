@@ -74,3 +74,6 @@
     @apply bg-background text-foreground;
   }
 }
+.ql-container.ql-snow {
+  height: 200px;
+}
