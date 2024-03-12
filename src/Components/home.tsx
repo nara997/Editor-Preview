@@ -4,7 +4,6 @@ import { Editor, IfilterData } from "./edit"
 
 
 
-
 export const Home = () => {
     const [data, setData] = useState<IfilterData[]>([])
     const [filterData, setFilterData] = useState<IfilterData[]>([])
