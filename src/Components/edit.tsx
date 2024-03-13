@@ -10,7 +10,8 @@ export type IfilterData = {
     subject: string,
     body: string
     view_href: string,
-    conversation: {
+    post_time: string,
+    conversation?: {
         last_post_time: string
     }
     author: {
@@ -33,6 +34,8 @@ interface IData {
 export const Editor = ({ filterData, setOpen, err }: IData) => {
     const quillRef = useRef<ReactQuillRef | null>(null);
 
+    console.log("filterData", filterData)
+
     useEffect(() => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
@@ -44,6 +47,7 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
     }, [quillRef]);
 
     const { handleSubmit, control } = useForm();
+    // console.log("filterData",filterData[0].body)
 
 
     const modules = {
