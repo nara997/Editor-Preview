@@ -32,6 +32,11 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+
+
+
+
   return (
     <div className="rounded-md border">
       <Table>
