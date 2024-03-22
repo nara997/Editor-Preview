@@ -28,16 +28,18 @@ interface IData {
 
 export const Editor = ({ filterData, setOpen, err }: IData) => {
     const quillRef = useRef<ReactQuillRef | null>(null);
+    console.log("editor filter data",filterData )
 
-    console.log("filterData", filterData)
+   
 
     useEffect(() => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
             const htmlContent = filterData[0].body;
+            console.log("htmlContent react quill", htmlContent)
             quill.format('size', 'normal')
-            const delta = quill.clipboard.convert(htmlContent); // Convert HTML to Delta
-            quill.setContents(delta); // Set Delta as editor content
+            quill.root.innerHTML = htmlContent;
+
         }
     }, [quillRef]);
 
@@ -131,7 +133,8 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
                                                     modules={modules}
                                                     className='w-full h-full px-3 py-2 text-sm font-normal border border-slate-300 rounded-md focus:outline-none focus:border-blue-500'
                                                     onChange={(content, delta, source, editor) => {
-                                                        const textContent = editor.getText();
+                                                        const textContent = editor.getHTML();
+                                                        console.log("html content", textContent,content, delta, source)
                                                         field.onChange(textContent);
                                                     }} // Update form value with Quill data
                                                     theme="snow"
@@ -140,7 +143,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
                                                 />
                                             )}
                                         />
-
                                     </div>
                                     <div className='space-x-4'>
                                         {err !== true ? (<button type="submit" className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300'>
