@@ -36,7 +36,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
             const htmlContent = filterData[0].body;
-            console.log("htmlContent react quill", htmlContent)
             quill.format('size', 'normal')
             quill.root.innerHTML = htmlContent;
 
@@ -44,7 +43,6 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
     }, [quillRef]);
 
     const { handleSubmit, control } = useForm();
-    // console.log("filterData",filterData[0].body)
 
 
     const modules = {
@@ -134,7 +132,7 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
                                                     className='w-full h-full px-3 py-2 text-sm font-normal border border-slate-300 rounded-md focus:outline-none focus:border-blue-500'
                                                     onChange={(content, delta, source, editor) => {
                                                         const textContent = editor.getHTML();
-                                                        console.log("html content", textContent,content, delta, source)
+                                                        console.log("html content", textContent, content, delta, source)
                                                         field.onChange(textContent);
                                                     }} // Update form value with Quill data
                                                     theme="snow"
