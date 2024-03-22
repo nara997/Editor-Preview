@@ -1,6 +1,4 @@
-
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-
+import { useForm, Controller, SubmitHandler, FieldValues } from 'react-hook-form';
 import 'quill/dist/quill.snow.css';
 import { useEffect, useRef} from 'react';
 import ReactQuill from 'react-quill';
@@ -9,16 +7,13 @@ export type IfilterData = {
     id: string,
     subject: string,
     body: string
-    view_href: string,
     post_time: string,
-    conversation?: {
-        last_post_time: string
-    }
     author: {
         login: string
-        id: string
     }
 }
+
+
 
 
 interface ReactQuillRef extends ReactQuill {
@@ -66,7 +61,7 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
 
 
 
-    const onSubmit: SubmitHandler<IfilterData> = (formData) => {
+    const onSubmit: SubmitHandler<FieldValues> = (formData) => {
 
         console.log('Form data:', formData);
     };
@@ -167,4 +162,3 @@ export const Editor = ({ filterData, setOpen, err }: IData) => {
         </div>
     );
 };
-

@@ -1,8 +1,6 @@
-import { DataTable } from "../Components/ui/Table/data-table";
-
-
 import { useEffect, useState } from "react";
 import { Editor, IfilterData } from "./edit";
+import { DataTable } from "../Components/ui/Table/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const Home = () => {
@@ -10,17 +8,8 @@ export const Home = () => {
   const [filterData, setFilterData] = useState<IfilterData[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [err, setErr] = useState<boolean>(false);
-//   const [showAll, setShowAll] = useState(false);
 
 
-interface TableData {
-  id: string;
-  subject: string;
-  author: {
-    login: string;
-  };
-  post_time: string;
-}
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,27 +29,20 @@ interface TableData {
   const buttonhandle = (id: string) => {
     const filtered =  data.filter((item) => item.id === id);
     const subfilter = data.filter((item) => item.subject.startsWith("Re:"));
-    if (subfilter.length !== 0) {
-      setErr(true);
-    } else {
-      setErr(false);
-    }
-     (filtered);
-     setOpen(true);
-     setFilterData(filtered)
+    setErr(subfilter.length !== 0);
+    setOpen(true);
+    setFilterData(filtered);
   };
 
-
-  const columns: ColumnDef<TableData>[] = [
+  const columns: ColumnDef<IfilterData>[] = [
     {
       accessorKey: "id",
       header: "Message Id",
     },
     {
-        accessorKey: "subject",
-        header: "Subject",
-       
-      },
+      accessorKey: "subject",
+      header: "Subject",
+    },
     {
       accessorKey: "author.login",
       header: "Author",
@@ -72,23 +54,16 @@ interface TableData {
     {
       accessorKey: "buttonColumn",
       header: "Actions", // Customize the header label for the button column
-      cell: ( {row}) => {
-          
-          console.log("res",  row.original.id);
-          
-          return (
-       
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-            onClick={() => buttonhandle(row.original.id)}
-          >
-            Moderate
-          </button>
-    
-        
-      )}, 
+      cell: ({ row }) => (
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+          onClick={() => buttonhandle(row.original.id)}
+        >
+          Moderate
+        </button>
+      ),
     },
-  ]
+  ];
 
   return (
     <div className="main-dev container max-2xl mx-auto">
@@ -98,17 +73,15 @@ interface TableData {
           alt="italent-logo"
         />
       </div>
-      {open === false && (
+      {!open && (
         <div className="min-w-36">
-          <h1 className="text-center p-6 font-semibold text-2xl font-serif" >
+          <h1 className="text-center p-6 font-semibold text-2xl font-serif">
             Message Moderator
           </h1>
-        
-         <DataTable columns={columns} data={data} />
-
+          <DataTable columns={columns} data={data} />
         </div>
       )}
-      {open === true && (
+      {open && (
         <div>
           <Editor filterData={filterData} setOpen={setOpen} err={err} />
         </div>
